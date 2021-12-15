@@ -4,4 +4,4 @@ bitrix/*
 /access.log
 /error.log
 /upload/
-/bitrix
+/bitrix/cache
