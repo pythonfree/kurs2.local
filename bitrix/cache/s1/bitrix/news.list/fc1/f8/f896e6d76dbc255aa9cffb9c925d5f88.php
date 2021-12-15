@@ -1,8 +1,8 @@
 <?
 if($INCLUDE_FROM_CACHE!='Y')return false;
-$datecreate = '001639555956';
-$dateexpire = '001675555956';
-$ser_content = 'a:2:{s:7:"CONTENT";s:2043:"RM 11:12:36<br><div class="news-list">
+$datecreate = '001639556668';
+$dateexpire = '001675556668';
+$ser_content = 'a:2:{s:7:"CONTENT";s:2028:"<div class="news-list">
 		<div class="news-item" id="bx_651765591_3">
 							<div class="news-date">27.05.2010</div>
 								<div class="news-title">Получено прочное водостойкое соединение</div>

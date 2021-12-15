@@ -33,7 +33,7 @@ $APPLICATION->SetTitle("Новости");
 		"CACHE_FILTER" => "N",
 		"CACHE_GROUPS" => "Y",
 		"DISPLAY_PANEL" => "N",
-		"SET_TITLE" => "N",
+		"SET_TITLE" => "Y",
 		"SET_STATUS_404" => "Y",
 		"INCLUDE_IBLOCK_INTO_CHAIN" => "Y",
 		"ADD_SECTIONS_CHAIN" => "Y",
