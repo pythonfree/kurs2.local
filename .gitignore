@@ -1,0 +1,6 @@
+/vendor/
+/.idea
+bitrix/*
+/access.log
+/error.log
+/upload/
