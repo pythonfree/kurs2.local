@@ -9,6 +9,17 @@ IncludeTemplateLangFile(__FILE__);
 <?$APPLICATION->ShowHead();?>
 <link href="<?=SITE_TEMPLATE_PATH?>/common.css" type="text/css" rel="stylesheet" />
 <link href="<?=SITE_TEMPLATE_PATH?>/colors.css" type="text/css" rel="stylesheet" />
+<?
+
+// D7
+$assets = \Bitrix\Main\Page\Asset::getInstance();
+$assets->addCss('/local/assets/style.css');
+$APPLICATION->AddHeadScript('/local/assets/jquery-1.8.2.min.js');
+$APPLICATION->AddHeadScript('/local/assets/slides.min.jquery.js');
+//$assets->addJs('/local/js/jquery-1.8.2.min.js');
+//$assets->addJs('/local/js/slides.min.jquery.js');
+
+?>
 
 	<!--[if lte IE 6]>
 	<style type="text/css">

@@ -52,6 +52,7 @@ $this->setFrameMode(true);
 ?>
 <br />
 <?endif?>
+
 <?$APPLICATION->IncludeComponent(
 	"bitrix:news.list",
 	"",
@@ -93,7 +94,8 @@ $this->setFrameMode(true);
 		"PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
 		"DISPLAY_DATE" => $arParams["DISPLAY_DATE"],
 		"DISPLAY_NAME" => "Y",
-		"DISPLAY_PICTURE" => $arParams["DISPLAY_PICTURE"],
+//		"DISPLAY_PICTURE" => $arParams["DISPLAY_PICTURE"],
+		"DISPLAY_PICTURE" => "Y",
 		"DISPLAY_PREVIEW_TEXT" => $arParams["DISPLAY_PREVIEW_TEXT"],
 		"PREVIEW_TRUNCATE_LEN" => $arParams["PREVIEW_TRUNCATE_LEN"],
 		"ACTIVE_DATE_FORMAT" => $arParams["LIST_ACTIVE_DATE_FORMAT"],
@@ -102,6 +104,9 @@ $this->setFrameMode(true);
 		"FILTER_NAME" => $arParams["FILTER_NAME"],
 		"HIDE_LINK_WHEN_NO_DETAIL" => $arParams["HIDE_LINK_WHEN_NO_DETAIL"],
 		"CHECK_DATES" => $arParams["CHECK_DATES"],
+
+        "LIST_PREV_PICT_H" => $arParams["LIST_PREV_PICT_H"],
+        "LIST_PREV_PICT_W" => $arParams["LIST_PREV_PICT_W"],
 	),
 	$component
 );?>

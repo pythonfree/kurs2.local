@@ -41,7 +41,7 @@ $APPLICATION->SetTitle("Новости");
 		"PREVIEW_TRUNCATE_LEN" => "",
 		"LIST_ACTIVE_DATE_FORMAT" => "d.m.Y",
 		"LIST_FIELD_CODE" => array(
-			0 => "",
+			0 => "DETAIL_PICTURE",
 			1 => "",
 		),
 		"LIST_PROPERTY_CODE" => array(
@@ -85,6 +85,8 @@ $APPLICATION->SetTitle("Новости");
 		"PAGER_BASE_LINK_ENABLE" => "N",
 		"SHOW_404" => "N",
 		"MESSAGE_404" => "",
+		"LIST_PREV_PICT_H" => "80",
+		"LIST_PREV_PICT_W" => "80",
 		"SEF_URL_TEMPLATES" => array(
 			"news" => "",
 			"section" => "",
