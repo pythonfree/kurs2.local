@@ -1,81 +1,87 @@
 <?
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 $APPLICATION->SetTitle("test");
 ?>
 
 <?php
-
-$email = COption::GetOptionString('main', 'email_from');
-echo $email;
-
-
+/*
 if (!CModule::IncludeModule('iblock')) {
     die('Ошибка загрузки модуля iblock');
 };
-//Получаем акции с истекшей датой активности, но со статусом АКТИВЕН в админке
+
+//Получаем Активные акции с истекшей датой активности
 $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'DATE_ACTIVE_TO'];
 $arFilter = [
     'IBLOCK_ID' => 5, //Акции
-    "!ACTIVE_DATE"=>"Y", //магия!  Чтобы выбрать все не активные по датам элементы, используется такой синтаксис
-    "ACTIVE" => "Y", // Статус акции - Активен, но фактически БХ игнорит, если дата активности истекла
+    "!ACTIVE_DATE" => "Y", //магия!  Чтобы выбрать все не активные по датам элементы, используется такой синтаксис
+    "ACTIVE" => "Y"
 ];
 $BDRes = CIBlockElement::GetList(false, $arFilter, false, false, $arSelect);
 $arResult['FINISHED_ACTIONS'] = [];
-while($arRes = $BDRes->GetNext())
-{
-    $arResult['FINISHED_ACTIONS'][$arRes['ID']] = $arRes;
+while ($finishedActionsCount = $BDRes->GetNext()) {
+    $arResult['FINISHED_ACTIONS'][$finishedActionsCount['ID']] = $finishedActionsCount;
 }
-//dump($arResult);
-//Получаем акции с истекшей датой активности, но со статусом АКТИВЕН в админке
+//Получаем Активные акции с истекшей датой активности
 
-//Изменяем активность на НЕАКТИВЕН для акции с истекшей датой активности, но со статусом АКТИВЕН в админке
+
+//Изменяем активность для акции с истекшей датой активности
 if (!empty($arResult['FINISHED_ACTIONS'])) {
     foreach ($arResult['FINISHED_ACTIONS'] as $Id => $action) {
         $el = new CIBlockElement;
-        $arLoadProductArray = ["ACTIVE" => "N",];
-        if (!($res = $el->Update($Id, $arLoadProductArray))) {
+        if (!($res = $el->Update($Id, ["ACTIVE" => "N"]))) {
             echo $el->LAST_ERROR;
         } else {
-            echo 'НЕАктивность акции c ID - ' . $Id . ' успешно ИЗМЕНЕНА в админке<br>';
+            echo 'Акция c ID - ' . $Id . ' деактивирована.<br>';
         }
     }
 }
-//Изменяем активность на НЕАКТИВЕН для акции с истекшей датой активности, но со статусом АКТИВЕН в админке
+//Изменяем активность для акции с истекшей датой активности
 
-//Получаем акции с истекшей датой активности, И со статусом НЕАКТИВЕН
+
+//Получаем количество акций с истекшей датой активности
 $arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'DATE_ACTIVE_TO'];
 $arFilter = [
     'IBLOCK_ID' => 5, //Акции
-    "!ACTIVE_DATE"=>"Y", //магия!  Чтобы выбрать все не активные по датам элементы, используется такой синтаксис
-    "ACTIVE" => "N", // Статус акции - НЕАктивен
+    "!ACTIVE_DATE" => "Y", //магия!  Чтобы выбрать все не активные по датам элементы, используется такой синтаксис
 ];
 $BDRes = CIBlockElement::GetList(false, $arFilter, false, false, $arSelect);
-$arResult['FINISHED_ACTIONS'] = [];
-while($arRes = $BDRes->GetNext())
-{
-    $arResult['FINISHED_ACTIONS'][$arRes['ID']] = $arRes;
-}
-dump($arResult);
-//Получаем акции с истекшей датой активности, И со статусом НЕАКТИВЕН
+$finishedActionsCount = intval($BDRes->SelectedRowsCount());
+//Получаем количество акций с истекшей датой активности
 
-//Получаем акции с истекшей датой активности, И со статусом НЕАКТИВЕН
-$arSelect = ["ID", "NAME", "DATE_ACTIVE_FROM", 'DATE_ACTIVE_TO'];
-$arFilter = [
-    'IBLOCK_ID' => 5, //Акции
-    "!ACTIVE_DATE"=>"Y", //магия!  Чтобы выбрать все не активные по датам элементы, используется такой синтаксис
-    "ACTIVE" => "N", // Статус акции - НЕАктивен
-];
-$res = CIBlockElement::GetList(false, $arFilter, false, false, $arSelect);
-while($ob = $res->GetNextElement())
-{
-    $arField = $ob->getFields();
-    dump($arField);
-}
-//Получаем акции с истекшей датой активности, И со статусом НЕАКТИВЕН
+if ($finishedActionsCount > 0) {
+    if (!CModule::IncludeModule('main')) {
+        die('Ошибка загрузки модуля main');
+    };
 
+    //запись в журнал событий
+    CEventLog::Add([
+        'SEVERITY' => 'INFO',
+        'AUDIT_TYPE_ID' => 'CHECK_FINISHED_ACTIONS',
+        'MODULE_ID' => 'iblock',
+        'ITEM_ID' => '',
+        'DESCRIPTION' => 'Проверка акций, в наличии - ' . $finishedActionsCount . ' окончившихся акций.',
+    ]);
 
+    //письмо администратору
+    $filter = [
+        "GROUPS_ID" => [1] //группа администраторов
+    ];
+    $rsUsers = CUser::GetList(($by = "personal_country"), ($order = "desc"), $filter);
+    $arEmail = [];
+    while ($arUser = $rsUsers->GetNext()) {
+        $arEmail[] = $arUser['EMAIL'];
+    }
+
+    if (count($arEmail)) {
+        $arEventFields = [
+            'TEXT' => $finishedActionsCount,
+            'EMAIL' => implode(', ', $arEmail),
+        ];
+        CEvent::Send("CHECK_ACTIONS", SITE_ID, $arEventFields);
+    }
+}*/
 
 ?>
 
 
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
