@@ -1,28 +1,70 @@
 <?php
 
+
+/*RegisterModuleDependences("iblock", "OnIBlockElementDelete", "catalog", "CCatalogProduct", "OnIBlockElementDelete");
+
+class CCatalogProduct
+{
+    function OnIBlockElementDelete($PRODUCT_ID)
+    {
+        dump($PRODUCT_ID);die;
+        global $DB;
+        echo "Вы удалили популярный товар с ID = {$PRODUCT_ID}";
+        return false;
+    }
+}*/
+
+
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", ["CIBLockHandler", "OnBeforeIBlockElementUpdateHandler"]);
+AddEventHandler("iblock", "OnBeforeIBlockElementDelete", ["CIBLockHandler", "OnBeforeIBlockElementDeleteHandler"]);
+
 
 class CIBLockHandler
 {
-    // создаем обработчик события "OnBeforeIBlockElementUpdate"
+
+    function OnBeforeIBlockElementDeleteHandler($ID)
+    {
+        if (CModule::IncludeModule("iblock")) {
+            $res = CIBlockElement::GetByID($ID);
+            if ($ar_res = $res->GetNext()) {
+                //деактивируем element по заданию вместо удаления если товар просмотрели более 1 раза
+                if (intval($ar_res["SHOW_COUNTER"]) >= 1) { //по заданию более 1 раза, здесь от 1 просмотра
+
+                    $el = new CIBlockElement;
+                    $arLoadProductArray = [
+                        "ACTIVE" => "N"
+                    ];
+                    $el->Update($ID, $arLoadProductArray);
+                    $GLOBALS['DB']->Commit();
+
+                    global $APPLICATION;
+                    $APPLICATION->throwException("Вы удалили популярный товар с ID = {$ID}, его уже просмотрели - " . $ar_res["SHOW_COUNTER"] . ' раз!');
+                    return false;
+                }
+            }
+        }
+    }
+
     function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        if ($arFields['IBLOCK_ID'] == NEWS_IBLOCK_ID) {//проверка ИБ Новости
+        global $APPLICATION;
+
+        if ($arFields['IBLOCK_ID'] == NEWS_IBLOCK_ID) {//ИБ Новости
             if ($arFields['ACTIVE'] === 'N') {//Если новость была деактивирована
                 //смотрим на Свежесть новости по заданию
                 $date = DateTime::createFromFormat('d.m.Y', $arFields["ACTIVE_FROM"]);
                 $now = new DateTime();
                 $dayDiff = $date->diff($now)->format('%a');
                 if (intval($dayDiff) <= 300) { //по заданию требуется сравнение до 3 дней, здесь до 300 дней
-                    $arFields['ACTIVE'] = 'Y';
-                    die("Вы деактивировали свежую новость");
+                    $APPLICATION->throwException("Вы деактивировали свежую новость");
+                    return false;
                 }
             }
         }
     }
 }
 
-AddEventHandler("main", "OnBeforeEventAdd", array("CMainHandler", "OnBeforeEventAddHandler"));
+/*AddEventHandler("main", "OnBeforeEventAdd", array("CMainHandler", "OnBeforeEventAddHandler"));
 AddEventHandler("main", "OnBeforeUserAdd", array("CMainHandler", "OnBeforeUserAddHandler"));
 
 class CMainHandler
@@ -54,4 +96,4 @@ class CMainHandler
 
 
     }
-}
+}*/

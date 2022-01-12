@@ -4,6 +4,29 @@ $APPLICATION->SetTitle("test");
 ?>
 
 <?php
+global $APPLICATION;
+
+if(!CModule::IncludeModule("iblock")) {
+    $APPLICATION->throwException('Ошибка загрузки модуля iblock');
+    return false;
+}
+$res = CIBlockElement::GetByID(44);
+if($ar_res = $res->GetNext()) {
+    dump($ar_res);die;
+//    if (intval($ar_res["SHOW_COUNTER"]) >= 1) {
+//        //деактивируем товар по заданию
+//        $el = new CIBlockElement;
+//        $arLoadProductArray = ["ACTIVE" => "N"];
+//        if (!$el->Update(intval($ar_res['ID']), $arLoadProductArray)) {
+//            $APPLICATION->throwException("Ошибка деактивации товара с ID = {$ar_res['ID']}");
+//            return false;
+//        };
+//    }
+}
+?>
+
+
+<?php
 /*
 if (!CModule::IncludeModule('iblock')) {
     die('Ошибка загрузки модуля iblock');
