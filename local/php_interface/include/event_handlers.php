@@ -28,14 +28,15 @@ class CIBLockHandler
             $res = CIBlockElement::GetByID($ID);
             if ($ar_res = $res->GetNext()) {
                 //деактивируем element по заданию вместо удаления если товар просмотрели более 1 раза
-                if (intval($ar_res["SHOW_COUNTER"]) >= 1) { //по заданию более 1 раза, здесь от 1 просмотра
+                if (intval($ar_res["SHOW_COUNTER"]) > 1) { //по заданию более 1 раза, здесь от 1 просмотра
 
                     $el = new CIBlockElement;
                     $arLoadProductArray = [
                         "ACTIVE" => "N"
                     ];
                     $el->Update($ID, $arLoadProductArray);
-                    $GLOBALS['DB']->Commit();
+
+                    $GLOBALS['DB']->Commit();//Утверждение транзакции, поскольку return false в Административном разделе отменяет транзакцию
 
                     global $APPLICATION;
                     $APPLICATION->throwException("Вы удалили популярный товар с ID = {$ID}, его уже просмотрели - " . $ar_res["SHOW_COUNTER"] . ' раз!');
