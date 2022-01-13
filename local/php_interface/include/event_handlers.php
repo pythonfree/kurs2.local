@@ -1,20 +1,5 @@
 <?php
 
-
-/*RegisterModuleDependences("iblock", "OnIBlockElementDelete", "catalog", "CCatalogProduct", "OnIBlockElementDelete");
-
-class CCatalogProduct
-{
-    function OnIBlockElementDelete($PRODUCT_ID)
-    {
-        dump($PRODUCT_ID);die;
-        global $DB;
-        echo "Вы удалили популярный товар с ID = {$PRODUCT_ID}";
-        return false;
-    }
-}*/
-
-
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", ["CIBLockHandler", "OnBeforeIBlockElementUpdateHandler"]);
 AddEventHandler("iblock", "OnBeforeIBlockElementDelete", ["CIBLockHandler", "OnBeforeIBlockElementDeleteHandler"]);
 
@@ -65,36 +50,42 @@ class CIBLockHandler
     }
 }
 
-/*AddEventHandler("main", "OnBeforeEventAdd", array("CMainHandler", "OnBeforeEventAddHandler"));
-AddEventHandler("main", "OnBeforeUserAdd", array("CMainHandler", "OnBeforeUserAddHandler"));
+
+AddEventHandler('main', 'OnBeforeUserUpdate', ['CMainHandler', 'OnBeforeUserUpdateHandler']);
 
 class CMainHandler
 {
-    function OnBeforeUserAddHandler(&$arFields)
+    function OnBeforeUserUpdateHandler(&$arParams)
     {
-        if ($arFields["LAST_NAME"] == $arFields["NAME"]) {
-            global $APPLICATION;
-            $APPLICATION->throwException("Имя и Фамилия одинаковы!");
-            return false;
-        }
-    }
+        //Проверка, состоит ли пользователь в группе контент-редакторы до изменения профиля
+        if (!in_array(CONTENT_EDITOR_GROUP_ID, CUser::GetUserGroup($arParams['ID']))) {
+            //Действия, если пользователь не состоял в группе контент-редакторы до изменения профиля
+            foreach ($arParams["GROUP_ID"] as $param) {
+                //Проверяем, добавлен ли пользователь в группу контент-редакторы
+                if ($param["GROUP_ID"] === CONTENT_EDITOR_GROUP_ID) {
+                    //Действия, если пользователь добавлен в группу контент-редакторы
 
-    function OnBeforeEventAddHandler(&$event, &$lid, &$arFields)
-    {
+                    //Рассылка писем пользователям, входящим группу контент-редакторы
+                    $filter = [
+                        "GROUPS_ID" => [CONTENT_EDITOR_GROUP_ID] //группа контент-редакторы
+                    ];
+                    $rsUsers = CUser::GetList(($by = "personal_country"), ($order = "desc"), $filter);
+                    $arEmail = [];
+                    while ($arUser = $rsUsers->GetNext()) {
+                        $arEmail[] = $arUser['EMAIL'];
+                    }
 
-        if ($event == "FEEDBACK_FORM") {
-            if (CMOdule::IncludeModule("iblock")) {
-                $el = new CIBlockElement;
-                $arLoadProductArray = array(
-                    "IBLOCK_ID" => FEEDBACK_IBLOCK_ID,
-                    "NAME" => $arFields["AUTHOR"],
-                    "DETAIL_TEXT" => $arFields["TEXT"],
-                    "DATE_ACTIVE_FROM" => ConvertTimeStamp(false, "FULL"),
-                );
-                $el->Add($arLoadProductArray);
+                    if (count($arEmail)) {
+                        $arEventFields = [
+                            'TEXT' => 'В группу контент-редакторы добавлен новый участник с ID - ' . $arParams['ID'],
+                            'EMAIL' => implode(', ', $arEmail),
+                        ];
+                        CEvent::Send("ADD_NEW_CONTENT_EDITOR", 's1', $arEventFields);
+                    }
+
+                    break;
+                }
             }
         }
-
-
     }
-}*/
+}
