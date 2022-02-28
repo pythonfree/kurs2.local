@@ -122,9 +122,9 @@ $APPLICATION->IncludeFile(
 		"ACTIVE_COMPONENT" => "Y"
 	)
 );?>
+                <?php if (strpos($APPLICATION->GetCurPage(), 'products')): ?>
                 <div class="content-block">
                     <div class="content-block-inner">
-                    <?php if (strpos($APPLICATION->GetCurPage(), 'products')): ?>
                         <div class="content-block-inner">
                             <h3><?=GetMessage('MATERIALS_SECTION')?></h3>
                             <?
@@ -134,9 +134,9 @@ $APPLICATION->IncludeFile(
                                 Array("MODE"=>"html"));
                             ?>
                         </div>
-                    <?php endif; ?>
                     </div>
                 </div>
+                <?php endif; ?>
 				<div class="content-block">
 					<div class="content-block-inner">
 						<h3><?=GetMessage('CFT_NEWS')?></h3>
