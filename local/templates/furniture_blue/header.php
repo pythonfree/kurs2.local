@@ -165,6 +165,7 @@ $APPLICATION->IncludeFile(
 			</div>
 		
 			<div id="workarea">
+                <?= $APPLICATION->ShowViewContent('DISPLAY_ACTIVE_FROM'); ?>
 				<h1 id="pagetitle"><?$APPLICATION->ShowTitle(false);?></h1>
                 <? if ($APPLICATION->GetCurPage() == '/'): ?>
     <?$APPLICATION->IncludeComponent(
