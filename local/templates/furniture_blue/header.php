@@ -122,16 +122,31 @@ $APPLICATION->IncludeFile(
 		"ACTIVE_COMPONENT" => "Y"
 	)
 );?>
+                <div class="content-block">
+                    <div class="content-block-inner">
+                    <?php if (strpos($APPLICATION->GetCurPage(), 'products')): ?>
+                        <div class="content-block-inner">
+                            <h3><?=GetMessage('MATERIALS_SECTION')?></h3>
+                            <?
+                            $APPLICATION->IncludeFile(
+                                SITE_DIR."/local/include/products.php",
+                                Array(),
+                                Array("MODE"=>"html"));
+                            ?>
+                        </div>
+                    <?php endif; ?>
+                    </div>
+                </div>
 				<div class="content-block">
 					<div class="content-block-inner">
 						<h3><?=GetMessage('CFT_NEWS')?></h3>
-<?
-$APPLICATION->IncludeFile(
-	SITE_DIR."include/news.php",
-	Array(),
-	Array("MODE"=>"html")
-);
-?>
+                        <?
+                        $APPLICATION->IncludeFile(
+                            SITE_DIR."include/news.php",
+                            Array(),
+                            Array("MODE"=>"html")
+                        );
+                        ?>
 					</div>
 				</div>
 				

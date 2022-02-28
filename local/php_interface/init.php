@@ -15,3 +15,5 @@ if (is_readable($_SERVER["DOCUMENT_ROOT"] . '/local/php_interface/include/agent.
 if (is_readable($_SERVER["DOCUMENT_ROOT"] . '/local/php_interface/include/event_handlers.php')) {
     require_once $_SERVER["DOCUMENT_ROOT"] . '/local/php_interface/include/event_handlers.php';
 }
+
+define('IBLOCK_PRODUCTS', 2);
