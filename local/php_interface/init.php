@@ -17,3 +17,4 @@ if (is_readable($_SERVER["DOCUMENT_ROOT"] . '/local/php_interface/include/event_
 }
 
 define('IBLOCK_PRODUCTS', 2);
+define('IBLOCK_VACANCIES', 4);

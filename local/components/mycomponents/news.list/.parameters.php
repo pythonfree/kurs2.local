@@ -45,7 +45,7 @@ $arComponentParameters = array(
 			"PARENT" => "BASE",
 			"NAME" => GetMessage("T_IBLOCK_DESC_LIST_ID"),
 			"TYPE" => "STRING",
-			"VALUES" => '4',
+			"VALUES" => IBLOCK_VACANCIES,
 		),
 		"NEWS_COUNT" => array(
 			"PARENT" => "BASE",
