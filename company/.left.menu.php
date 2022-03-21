@@ -30,11 +30,18 @@ $aMenuLinks = Array(
 		"" 
 	),
 	Array(
-		"Вакансии", 
+		"Вакансии (Компонент)",
 		"vacancies.php", 
 		Array(), 
 		Array(), 
 		"" 
+	),
+	Array(
+		"Вакансии (Комплексный компонент)",
+		"/vacancies/",
+		Array(),
+		Array(),
+		""
 	)
 );
 ?>

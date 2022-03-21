@@ -1,14 +1,16 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Вакансии");
-?><?$APPLICATION->IncludeComponent(
+?>
+
+<?$APPLICATION->IncludeComponent(
 	"mycomponents:vacancies.list", 
 	"vacancies.list", 
 	array(
 		"ACTIVE_DATE_FORMAT" => "d.m.Y",
 		"CACHE_GROUPS" => "Y",
 		"CACHE_TIME" => "300",
-		"CACHE_TYPE" => "A",
+		"CACHE_TYPE" => "N",
 		"COMPONENT_TEMPLATE" => "vacancies.list",
 		"DETAIL_URL" => "",
 		"FIELD_CODE" => array(
@@ -29,4 +31,6 @@ $APPLICATION->SetTitle("Вакансии");
 		"SORT_ORDER2" => ""
 	),
 	false
-);?><br><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);?>
+
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

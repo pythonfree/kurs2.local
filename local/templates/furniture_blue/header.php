@@ -13,9 +13,9 @@ IncludeTemplateLangFile(__FILE__);
 
 // D7
 $assets = \Bitrix\Main\Page\Asset::getInstance();
-$assets->addCss('/local/assets/style.css');
-$APPLICATION->AddHeadScript('/local/assets/jquery-1.8.2.min.js');
-$APPLICATION->AddHeadScript('/local/assets/slides.min.jquery.js');
+$assets->addCss('/local/assets/css/style.css');
+$APPLICATION->AddHeadScript('/local/assets/js/jquery-1.8.2.min.js');
+$APPLICATION->AddHeadScript('/local/assets/js/slides.min.jquery.js');
 //$assets->addJs('/local/js/jquery-1.8.2.min.js');
 //$assets->addJs('/local/js/slides.min.jquery.js');
 
